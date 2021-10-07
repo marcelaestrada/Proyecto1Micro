@@ -1,0 +1,15 @@
+Caso (+,+)
+→ disminuye en x hasta llegar a -x inicial 
+→ coordenada y se queda igual 
+
+Caso (-,+)
+→ coordenada x se queda igual
+→ disminuye en y hasta llegar a -y inicial
+
+Caso (-,-) 
+→ aumenta en x hasta llegar a +x inicial
+→ coordenada y se queda igual 
+
+Caso (+,-)
+→ aumenta uno en x y luego sigue igual 
+→ se copia coordenada y, luego aumenta en y hasta y = x
