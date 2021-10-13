@@ -9,6 +9,8 @@ tercera DB '(1,1)$'
 coordenadaX DB 01h
 coordenadaY DB 01h
 bandera DB 01h
+contador DB 01h
+residuoA DB ?
 resi DB ?
 diez DB 0Ah
 centenas DB ?
@@ -79,6 +81,7 @@ total DB ?
 	CALL imprimirEnter
 	
 	;imprimir primera coordenada
+	CALL imprimirActual
 	MOV DX, offset primera
 	MOV AH, 09h
 	INT 21h
@@ -88,6 +91,7 @@ total DB ?
 	CALL imprimirEnter
 
 	;imprimir segunda coordenada
+	CALL imprimirActual
 	MOV DX, offset segunda
 	MOV AH, 09h
 	INT 21h
@@ -97,6 +101,7 @@ total DB ?
 	CALL imprimirEnter
 	
 	;imprimir tercera coordenada
+	CALL imprimirActual
 	MOV DX, offset tercera
 	MOV AH, 09h
 	INT 21h
@@ -309,6 +314,7 @@ total DB ?
 	;IMPRIMIR NUMEROS Y PARENTESIS
 	imprimirCoordenada proc near 
 		CALL imprimirEnter
+		CALL imprimirActual
 		;parentesis
 		XOR DX, DX
 		MOV DL, 28h
@@ -358,6 +364,7 @@ total DB ?
 
 	imprimirCoordenadaN proc near 
 		CALL imprimirEnter
+		CALL imprimirActual
 		;parentesis
 		XOR DX, DX
 		MOV DL, 28h
@@ -403,6 +410,7 @@ total DB ?
 	
 	imprimirCoordenadaNN proc near 
 		CALL imprimirEnter
+		CALL imprimirActual
 		;parentesis
 		XOR DX, DX
 		MOV DL, 28h
@@ -449,6 +457,7 @@ total DB ?
 
 	imprimirCoordenadaaN proc near 
 		CALL imprimirEnter
+		CALL imprimirActual
 		;parentesis
 		XOR DX, DX
 		MOV DL, 28h
@@ -486,6 +495,61 @@ total DB ?
 		INT 21h
 	ret
 	imprimirCoordenadaaN endp
+	
+	imprimirActual proc near
+		XOR AX, AX
+		MOV AL, contador
+		MOV BL, 64h
+		DIV BL
+
+		MOV residuoA, AH
+
+		MOV DL, AL
+		ADD DL, 30h
+		MOV AH, 02h
+		INT 21h
+
+		XOR AX, AX
+		MOV AL, residuoA
+		MOV BL, diez
+		DIV BL
+
+		MOV residuoA, AH
+	
+		MOV DL, AL
+		ADD DL, 30h
+		MOV AH, 02h
+		INT 21h
+	
+		MOV DL, residuoA
+		ADD DL, 30h
+		MOV AH, 02h
+		INT 21h
+
+		;Space
+		XOR DX, DX
+		MOV DL, 20h
+		MOV AH, 02h
+		INT 21h
+
+		;Flecha
+		XOR DX, DX
+		MOV DL, 3Eh
+		MOV AH, 02h
+		INT 21h
+
+		;Space
+		XOR DX, DX
+		MOV DL, 20h
+		MOV AH, 02h
+		INT 21h
+
+		XOR AX, AX 
+		MOV AL, contador
+		ADD AL, 01h
+		MOV contador, AL
+	ret
+	imprimirActual endp	
 
 	;LLAMAR FORMAR NUMERO
 	llamarFormarNumero:
