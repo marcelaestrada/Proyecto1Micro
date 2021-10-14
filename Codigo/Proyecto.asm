@@ -25,7 +25,7 @@ matriz 		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
 		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
 		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
 		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, '$'
-figura DB 2Bh
+figura DB 158
 
 ;banderas, contadores y resultados
 bandera DB 01h
@@ -668,7 +668,7 @@ total DB ?
 		MOV MatrizC, AH
 
 		XOR AX, AX
-		MOV AL, 3Eh
+		MOV AL, 26
 		MOV figura, AL
 	ret
 	sumarUno endp
@@ -680,7 +680,7 @@ total DB ?
 		MOV MatrizC, AH
 
 		XOR AX, AX
-		MOV AL, 5Eh
+		MOV AL, 24
 		MOV figura, AL
 	ret
 	restarOnce endp
@@ -692,7 +692,7 @@ total DB ?
 		MOV MatrizC, AH
 
 		XOR AX, AX
-		MOV AL, 3Ch
+		MOV AL, 27
 		MOV figura, AL
 	ret
 	restarUno endp
@@ -704,7 +704,7 @@ total DB ?
 		MOV MatrizC, AH
 
 		XOR AX, AX
-		MOV AL, 56h
+		MOV AL, 25
 		MOV figura, AL
 	ret
 	sumarOnce endp
