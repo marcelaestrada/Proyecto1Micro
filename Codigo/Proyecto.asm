@@ -1,18 +1,40 @@
-ï»¿.model small
+.model small
 .data
+;cadenas
 iproyecto DB 'PROYECTO 1: Ingrese un numero entre 1 y 100, siguiendo el formato ###$'
 errorNum DB 'Este numero no es valido$'
-pruebaNum DB 'El numero es valido$'
+
+;coordenadas
 primera DB '(0,0)$'
 segunda DB '(1,0)$'
 tercera DB '(1,1)$'
 coordenadaX DB 01h
 coordenadaY DB 01h
+MatrizC DB 00h
+decenas2 DB 05h
+unidades2 DB 09h
+
+;Matriz para imprimir
+matriz 		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 0Ah
+		db 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, 5Fh, '$'
+figura DB 2Bh
+
+;banderas, contadores y resultados
 bandera DB 01h
 contador DB 01h
 residuoA DB ?
 resi DB ?
 diez DB 0Ah
+
+;numeros que ingresa el usuario
 centenas DB ?
 decenas DB ?
 unidades DB ? 
@@ -25,6 +47,7 @@ total DB ?
 	programa:
 	MOV AX, @DATA
 	MOV DS, AX
+	CALL formarCoo
 
 	;imprimir ejercicio y leer primer ejercicio
 	MOV DX, offset iproyecto
@@ -57,7 +80,7 @@ total DB ?
 	
 	CALL primeraValidacion
 	
-	;Formar el nÃºmero
+	;Formar el número
 	formarNumero:
 	XOR AX,AX
 	MOV AL, 64h
@@ -86,6 +109,7 @@ total DB ?
 	MOV AH, 09h
 	INT 21h
 	
+	CALL agregarMatriz
 	CALL restaTotal
 	JLE llamarFinal
 	CALL imprimirEnter
@@ -96,6 +120,8 @@ total DB ?
 	MOV AH, 09h
 	INT 21h
 
+	CALL sumarUno
+	CALL agregarMatriz
 	CALL restaTotal
 	JLE llamarFinal
 	CALL imprimirEnter
@@ -106,8 +132,10 @@ total DB ?
 	MOV AH, 09h
 	INT 21h
 
+	CALL restarOnce
+	CALL agregarMatriz
 	CALL restaTotal
-	JLE llamarFinal	
+	JLE llamarFinal
 	JMP primerCasoResta
 	
 	llamarCasos endp	
@@ -140,6 +168,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaX, AH
 		
+		CALL restarUno
+		CALL agregarMatriz
 		CALL imprimirCoordenada
 		CALL restaTotal
 		JLE llamarFinal
@@ -156,6 +186,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaX, AH
 
+		CALL restarUno
+		CALL agregarMatriz
 		CALL imprimirCoordenadaN
 		CALL restaTotal
 		JLE llamarFinal
@@ -174,6 +206,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaY, AH
 		
+		CALL sumarOnce
+		CALL agregarMatriz
 		CALL imprimirCoordenadaN
 		CALL restaTotal
 		JLE llamarFinal
@@ -193,9 +227,11 @@ total DB ?
 		DIV diez
 		MOV coordenadaY, AH
 
+		CALL SumarOnce
+		CALL agregarMatriz
 		CALL imprimirCoordenadaNN
 		CALL restaTotal
-		JLE llamarFinal
+		JLE llamarFin2
 
 		XOR AX, AX
 		MOV AL, bandera
@@ -211,6 +247,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaX, AH
 		
+		CALL SumarUno
+		CALL agregarMatriz
 		CALL llamarImpresion
 		CALL restaTotal
 		JLE llamarFin2
@@ -227,6 +265,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaX, AH
 		
+		CALL SumarUno
+		CALL agregarMatriz
 		CALL imprimirCoordenadaaN
 		CALL restaTotal
 		JLE llamarFin2
@@ -249,6 +289,8 @@ total DB ?
 		MOV bandera, AH
 		MOV coordenadaX, AH
 
+		CALL SumarUno
+		CALL agregarMatriz
 		CALL imprimirCoordenadaaN
 		CALL restaTotal
 		JLE llamarFin4
@@ -265,6 +307,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaY, AH
 		
+		CALL restarOnce
+		CALL agregarMatriz
 		CALL imprimirCoordenada
 		CALL restaTotal
 		JLE llamarFin4
@@ -281,6 +325,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaY, AH
 		
+		CALL restarOnce
+		CALL agregarMatriz
 		CALL llamarImprimirCoor
 		CALL restaTotal
 		JLE llamarFin4
@@ -297,6 +343,8 @@ total DB ?
 		DIV diez
 		MOV coordenadaY, AH
 		
+		CALL restarOnce
+		CALL agregarMatriz
 		CALL imprimirCoordenada
 		CALL restaTotal
 		JLE llamarFin4
@@ -555,12 +603,12 @@ total DB ?
 	llamarFormarNumero:
 		JMP formarNumero
 
-	;VALIDACIÃ“N DE LOS NÃšMEROS
+	;VALIDACIÓN DE LOS NÚMEROS
 	sonNumeros proc near
 		CMP AL, 00h
-		JL mostrarError
+		JL Error
 		CMP AL, 09h
-		JG mostrarError
+		JG Error
 	ret
 	sonNumeros endp
 	
@@ -574,23 +622,105 @@ total DB ?
 		JMP mostrarError
 	primeraValidacion endp
 	
-	;ValidaciÃ³n en el caso que las centenas sea 1, las decenas y unidades deben ser 0
+	;Validación en el caso que las centenas sea 1, las decenas y unidades deben ser 0
 	validacionCien proc near
 		CMP decenas, 01h
-		JGE mostrarError
+		JGE Error
 		CMP unidades, 01h
-		JGE mostrarError
+		JGE Error
 		JMP formarNumero
 	validacionCien endp
 
-	;ValidaciÃ³n en el caso que las centenas y decenas sean 0, unidades tiene que ser mÃ­nimo 1
+	;Validación en el caso que las centenas y decenas sean 0, unidades tiene que ser mínimo 1
 	validacionUnidades proc near
 		CMP unidades, 01h
-		JL mostrarError
+		JL Error
 		JMP formarNumero
 	validacionUnidades endp
 
-	;Mostrar nÃºmero ingresado no es correcto
+	Error:
+		JMP mostrarError	
+
+	;PARTE GRÁFICA, IMPRIMIR MATRIZ
+	;Agregar punto a la matriz
+	agregarMatriz proc near
+		XOR AX, AX
+		MOV AL, 00h
+		ADD AL, MatrizC
+		MOV SI, AX
+		MOV AL, figura
+		MOV matriz[SI], AL
+	ret
+	agregarMatriz endp
+
+	;Imprimir la matriz 
+	imprimirMatriz proc near
+		MOV DX, offset matriz[0][0]
+		MOV AH, 09h
+		INT 21h
+	ret
+	imprimirMatriz endp
+
+	sumarUno proc near
+		XOR AX,AX
+		MOV AH, MatrizC
+		ADD AH, 01h
+		MOV MatrizC, AH
+
+		XOR AX, AX
+		MOV AL, 3Eh
+		MOV figura, AL
+	ret
+	sumarUno endp
+		
+	restarOnce proc near
+		XOR AX,AX
+		MOV AH, MatrizC
+		SUB AH, 0Bh
+		MOV MatrizC, AH
+
+		XOR AX, AX
+		MOV AL, 5Eh
+		MOV figura, AL
+	ret
+	restarOnce endp
+
+	restarUno proc near
+		XOR AX,AX
+		MOV AH, MatrizC
+		SUB AH, 01h
+		MOV MatrizC, AH
+
+		XOR AX, AX
+		MOV AL, 3Ch
+		MOV figura, AL
+	ret
+	restarUno endp
+
+	sumarOnce proc near
+		XOR AX,AX
+		MOV AH, MatrizC
+		ADD AH, 0Bh
+		MOV MatrizC, AH
+
+		XOR AX, AX
+		MOV AL, 56h
+		MOV figura, AL
+	ret
+	sumarOnce endp
+
+	formarCoo proc near
+		XOR AX,AX
+		MOV AL, 0Ah
+		MUL decenas2
+		ADD MatrizC, AL
+	
+		MOV AL, unidades2
+		ADD MatrizC, AL
+	ret
+	formarCoo endp
+
+	;Mostrar número ingresado no es correcto
 	mostrarError proc near
 		;Enter
 		MOV DL, 0Ah
@@ -605,7 +735,10 @@ total DB ?
 
 	;Finalizar programa
 	Fin:
+		CALL imprimirEnter
+		CALL imprimirMatriz
 		MOV AH,4CH			    
 		INT 21h  
 
 	END programa
+  
